@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/ui/Button';
 import { Zap, Mail, Lock, User, Phone, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -12,17 +12,17 @@ export const Login: React.FC = () => {
   const [recoverySent, setRecoverySent] = useState(false);
 
   const { login, user } = useApp();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) history.push('/');
-  }, [user, history]);
+    if (user) navigate('/');
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const success = await login(email, password);
-      if (success) history.push('/');
+      if (success) navigate('/');
     } catch (err) {
       setError("Credenciais inválidas ou usuário não encontrado.");
     }
@@ -139,13 +139,13 @@ export const Signup: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '' });
   const [error, setError] = useState('');
   const { signup, user } = useApp();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-        history.push('/');
+        navigate('/');
     }
-  }, [user, history]);
+  }, [user, navigate]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();

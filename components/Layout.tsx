@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, X, Zap, LogOut, ShieldAlert, Search, UserCircle
 } from 'lucide-react';
@@ -11,12 +11,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { user, logout, features } = useApp();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogout = () => {
     logout();
-    history.push('/login-pro');
+    navigate('/login-pro');
   };
 
   const getIcon = (iconName: string) => {

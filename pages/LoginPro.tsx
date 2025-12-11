@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/ui/Button';
 import { Zap, Lock, User, AlertTriangle } from 'lucide-react';
@@ -9,23 +9,23 @@ const LoginPro: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login, user, isProActivated } = useApp();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Se não estiver ativado via webhook (localStorage), chuta de volta pra vendas
   useEffect(() => {
     if (!isProActivated) {
-        history.push('/');
+        navigate('/');
     }
     if (user) {
-        history.push('/tool/chat');
+        navigate('/tool/chat');
     }
-  }, [user, isProActivated, history]);
+  }, [user, isProActivated, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const success = await login(email, password);
-      if (success) history.push('/tool/chat');
+      if (success) navigate('/tool/chat');
     } catch (err) {
       setError("Acesso negado. Verifique suas credenciais de assinante.");
     }

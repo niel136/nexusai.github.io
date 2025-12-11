@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   Zap, Lock, Search, Menu, X, Crown, ArrowRight, Grid, MessageSquare, Image
 } from 'lucide-react';
@@ -7,7 +7,7 @@ import { INITIAL_FEATURES } from '../constants';
 import * as Icons from 'lucide-react';
 
 const PreviewMode: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -129,7 +129,7 @@ const PreviewMode: React.FC = () => {
                       <Crown size={20} /> Assinar Pro Agora
                   </button>
                   
-                  <button onClick={() => history.push('/')} className="text-sm text-slate-500 hover:text-blue-600 font-medium flex items-center justify-center gap-1 mx-auto">
+                  <button onClick={() => navigate('/')} className="text-sm text-slate-500 hover:text-blue-600 font-medium flex items-center justify-center gap-1 mx-auto">
                       Voltar para Apresentação <ArrowRight size={14} />
                   </button>
               </div>
@@ -138,7 +138,7 @@ const PreviewMode: React.FC = () => {
 
       {/* Floating CTA */}
       <div className="fixed bottom-6 right-6 z-40">
-          <button onClick={() => history.push('/')} className="bg-slate-900 text-white px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">
+          <button onClick={() => navigate('/')} className="bg-slate-900 text-white px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">
               Sair do Preview
           </button>
       </div>
