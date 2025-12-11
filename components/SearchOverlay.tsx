@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, ChevronRight, Zap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { AppFeature } from '../types';
 import * as Icons from 'lucide-react';
@@ -15,7 +15,7 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose })
   const [results, setResults] = useState<AppFeature[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const { features, user } = useApp();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   useEffect(() => {
     if (isOpen) {
@@ -59,7 +59,7 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose })
   }, [query, features, user]);
 
   const handleSelect = (path: string) => {
-    navigate(path);
+    history.push(path);
     onClose();
   };
 

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { generateTextTool } from '../services/geminiService';
 import { Button } from '../components/ui/Button';
 import { Loader2, Sparkles, Copy, Check } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
-export const DynamicTool: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+// Accepting match via props from React Router v5 Route
+export const DynamicTool: React.FC<any> = ({ match }) => {
+  const { id } = match?.params || {};
   const { features, deductCredit } = useApp();
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');

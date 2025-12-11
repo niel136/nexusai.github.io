@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { 
   Menu, X, Zap, LogOut, ShieldAlert, Search, UserCircle
 } from 'lucide-react';
@@ -11,11 +11,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { user, logout, features } = useApp();
-  const navigate = useNavigate();
+  const history = useHistory();
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
-    navigate('/login-pro');
+    history.push('/login-pro');
   };
 
   const getIcon = (iconName: string) => {
@@ -72,21 +73,26 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             {user?.role === 'admin' && (
               <div className="mb-4">
                  <p className="px-4 text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2">Admin</p>
-                 <NavLink to="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} className={({isActive}) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${isActive ? 'bg-primary/10 text-primary' : 'text-text-muted hover:bg-bg-input'}`}>
+                 <Link 
+                    to="/admin/dashboard" 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${location.pathname.includes('/admin') ? 'bg-primary/10 text-primary' : 'text-text-muted hover:bg-bg-input'}`}
+                 >
                     <ShieldAlert size={18} /> Painel Admin
-                 </NavLink>
+                 </Link>
               </div>
             )}
 
             <p className="px-4 text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2 mt-4">Ferramentas</p>
             {features.filter(f => f.enabled).map((feature) => {
               const Icon = getIcon(feature.icon);
+              const isActive = location.pathname === feature.path;
               return (
-                <NavLink
+                <Link
                   key={feature.id}
                   to={feature.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={({isActive}) => `relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-95 ${
+                  className={`relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-95 ${
                     isActive 
                       ? 'bg-primary text-white shadow-soft' 
                       : 'text-text-muted hover:bg-bg-input hover:text-text-main'
@@ -100,15 +106,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       NOVO
                     </span>
                   )}
-                </NavLink>
+                </Link>
               )
             })}
           </nav>
 
           <div className="mt-4 pt-4 border-t border-border space-y-1">
-             <NavLink to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-text-muted hover:bg-bg-input">
+             <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-text-muted hover:bg-bg-input">
                 <UserCircle size={18} /> Meu Perfil
-             </NavLink>
+             </Link>
              <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10">
                 <LogOut size={18} /> Sair
              </button>

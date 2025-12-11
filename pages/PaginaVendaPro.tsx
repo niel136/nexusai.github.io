@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { 
   Check, Zap, Crown, ShieldCheck, Image, MessageSquare, 
   Rocket, Eye, Key, Star
@@ -7,7 +7,7 @@ import {
 import { useApp } from '../context/AppContext';
 
 const PaginaVendaPro: React.FC = () => {
-  const navigate = useNavigate();
+  const history = useHistory();
   const { activateProDevice } = useApp();
   const [showActivation, setShowActivation] = useState(false);
   const [activationCode, setActivationCode] = useState('');
@@ -27,14 +27,14 @@ const PaginaVendaPro: React.FC = () => {
   };
 
   const handlePreview = () => {
-    navigate('/preview');
+    history.push('/preview');
   };
 
   const handleActivate = () => {
     if (activationCode === 'PRO123') { 
         activateProDevice();
         alert("Acesso liberado pelo sistema! Redirecionando para Login Exclusivo.");
-        navigate('/login-pro');
+        history.push('/login-pro');
     } else {
         alert("Código de ativação inválido.");
     }
