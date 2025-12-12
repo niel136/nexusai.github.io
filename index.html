@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>NexusAI Studio</title>
+    
+    <!-- Tailwind CSS (via CDN para evitar erros de build de CSS complexos agora) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -17,130 +22,37 @@
               sans: ['Outfit', 'sans-serif'],
             },
             colors: {
-              // Dynamic Theme Colors mapped to CSS variables
-              primary: 'var(--color-primary)',
-              secondary: 'var(--color-secondary)',
-              bg: {
-                main: 'var(--bg-main)',
-                card: 'var(--bg-card)',
-                input: 'var(--bg-input)',
-              },
-              text: {
-                main: 'var(--text-main)',
-                muted: 'var(--text-muted)',
-              },
-              border: 'var(--border-color)',
-            },
-            boxShadow: {
-              'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-              'glow': '0 0 15px var(--color-primary-glow)',
+              primary: '#2563eb',
             }
           }
         }
       }
     </script>
     <style>
-      :root {
-        /* Default: White/Clean */
-        --color-primary: #2563eb;
-        --color-primary-glow: rgba(37, 99, 235, 0.3);
-        --color-secondary: #f1f5f9;
-        --bg-main: #f8fafc;
-        --bg-card: #ffffff;
-        --bg-input: #f1f5f9;
-        --text-main: #0f172a;
-        --text-muted: #64748b;
-        --border-color: #e2e8f0;
-      }
-
-      /* Blue Theme */
-      [data-theme='blue'] {
-        --color-primary: #0ea5e9;
-        --color-secondary: #e0f2fe;
-        --bg-main: #f0f9ff;
-        --bg-card: #ffffff;
-        --bg-input: #e0f2fe;
-        --text-main: #0c4a6e;
-        --text-muted: #38bdf8;
-        --border-color: #bae6fd;
-      }
-
-      /* Purple Theme */
-      [data-theme='purple'] {
-        --color-primary: #9333ea;
-        --color-secondary: #f3e8ff;
-        --bg-main: #faf5ff;
-        --bg-card: #ffffff;
-        --bg-input: #f3e8ff;
-        --text-main: #3b0764;
-        --text-muted: #a855f7;
-        --border-color: #d8b4fe;
-      }
-
-      /* Green Theme */
-      [data-theme='green'] {
-        --color-primary: #16a34a;
-        --color-secondary: #dcfce7;
-        --bg-main: #f0fdf4;
-        --bg-card: #ffffff;
-        --bg-input: #dcfce7;
-        --text-main: #052e16;
-        --text-muted: #22c55e;
-        --border-color: #bbf7d0;
-      }
-
-      /* Dark Theme */
-      [data-theme='dark'] {
-        --color-primary: #6366f1;
-        --color-primary-glow: rgba(99, 102, 241, 0.3);
-        --color-secondary: #1e293b;
-        --bg-main: #020617;
-        --bg-card: #0f172a;
-        --bg-input: #1e293b;
-        --text-main: #f8fafc;
-        --text-muted: #94a3b8;
-        --border-color: #1e293b;
-      }
-
-      body {
-        background-color: var(--bg-main);
-        color: var(--text-main);
-        transition: background-color 0.3s, color 0.3s;
-      }
-
-      ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--border-color);
-        border-radius: 3px;
-      }
-      
-      .glass-panel {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-soft);
-      }
+      body { margin: 0; background-color: #f8fafc; color: #0f172a; font-family: 'Outfit', sans-serif; }
     </style>
-    <script type="importmap">
+  <script type="importmap">
 {
   "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
-    "react/": "https://esm.sh/react@^19.2.1/",
-    "react": "https://esm.sh/react@^19.2.1",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
     "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
     "react-markdown": "https://esm.sh/react-markdown@^10.1.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
-    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.39.0"
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.87.1",
+    "vite": "https://esm.sh/vite@^7.2.7",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
-  </head>
+</head>
   <body>
+    <noscript>Você precisa habilitar o JavaScript para executar este app.</noscript>
     <div id="root"></div>
+    
+    <!-- CRUCIAL: Carrega o ponto de entrada do React -->
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
