@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Carrega variáveis de ambiente baseadas no modo (development/production)
+  // O uso de process.cwd() agora é seguro devido ao @types/node no package.json
   const env = loadEnv(mode, (process as any).cwd(), '');
 
   return {
@@ -14,6 +15,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     define: {
       // O SDK @google/genai espera process.env.API_KEY.
+      // Substituímos pelo valor real em tempo de build.
       'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_API_KEY || '')
     },
     server: {
