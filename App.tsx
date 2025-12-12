@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { HashRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './components/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
 import { AppProvider, useApp } from './context/AppContext';
@@ -9,6 +9,7 @@ import { DynamicTool } from './pages/DynamicTool';
 import Profile from './pages/Profile';
 import PreviewMode from './pages/PreviewMode';
 import LoginPro from './pages/LoginPro';
+import Sitemap from './components/Sitemap';
 
 // Lazy loading existing pages
 const Chat = lazy(() => import('./pages/Chat'));
@@ -21,10 +22,37 @@ const LoadingFallback = () => (
   <div className="flex h-screen items-center justify-center bg-slate-50 text-blue-600">
     <div className="flex flex-col items-center gap-3">
       <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
-      <span className="text-sm font-medium">Carregando sistema...</span>
+      <span className="text-sm font-medium">Carregando NexusAI...</span>
     </div>
   </div>
 );
+
+// --- 1. DETECÇÃO DE AMBIENTE ---
+const checkPreviewEnvironment = (): boolean => {
+  const indicators = [
+    'googleusercontent',
+    'webcontainer',
+    'shim',
+    '.goog',
+    'scf.usercontent',
+    'stackblitz',
+    'codesandbox',
+    'localhost', // Opcional: tratar localhost como preview
+    '127.0.0.1'
+  ];
+  
+  const hostname = window.location.hostname;
+  const href = window.location.href;
+  
+  return indicators.some(i => hostname.includes(i) || href.includes(i));
+};
+
+const isPreviewEnv = checkPreviewEnvironment();
+
+// --- 2. SELEÇÃO DE ROTEADOR ---
+// Se for preview (IDX, etc), usa HashRouter para não quebrar no refresh.
+// Se for produção (Vercel, AWS), usa BrowserRouter para SEO e UTMs.
+const Router = isPreviewEnv ? HashRouter : BrowserRouter;
 
 // Wrapper for protected routes
 const ProtectedLayout: React.FC = () => {
@@ -45,11 +73,11 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <ThemeProvider>
         <AppProvider>
-          <HashRouter>
+          <Router>
             <Suspense fallback={<LoadingFallback />}>
               <RouteRender />
             </Suspense>
-          </HashRouter>
+          </Router>
         </AppProvider>
       </ThemeProvider>
     </ErrorBoundary>
@@ -61,8 +89,21 @@ const RouteRender: React.FC = () => {
 
   return (
     <Routes>
-      {/* Landing Page como Home Padrão */}
-      <Route path="/" element={<PaginaVendaPro />} />
+      {/* 
+         --- 3. REDIRECIONAMENTO INTELIGENTE ---
+         Em Preview: Redireciona para /sitemap para facilitar o dev.
+         Em Produção: Carrega a Landing Page (PaginaVendaPro).
+      */}
+      <Route 
+        path="/" 
+        element={isPreviewEnv ? <Navigate to="/sitemap" replace /> : <PaginaVendaPro />} 
+      />
+
+      {/* Rota utilitária para desenvolvimento */}
+      <Route path="/sitemap" element={<Sitemap />} />
+
+      {/* Rota real da Landing Page (acessível diretamente se necessário) */}
+      <Route path="/lp-video" element={<PaginaVendaPro />} />
       
       {/* Rotas Públicas */}
       <Route path="/preview" element={<PreviewMode />} />

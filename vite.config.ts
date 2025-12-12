@@ -7,16 +7,18 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, (process as any).cwd(), '');
 
   return {
+    // CRÍTICO: Define a base como relativa. Isso permite que o app funcione
+    // dentro de subpastas ou proxies de preview (como Google IDX) sem quebrar os caminhos dos assets.
+    base: './',
+    
     plugins: [react()],
     define: {
-      // CRÍTICO: O SDK @google/genai espera process.env.API_KEY.
-      // O Vite substitui essa string pelo valor da variável durante o build.
-      // Isso previne o erro "process is not defined" que causa Tela Preta.
+      // O SDK @google/genai espera process.env.API_KEY.
       'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_API_KEY || '')
     },
     server: {
       port: 3000,
-      host: true // Necessário para alguns ambientes de container
+      host: true 
     },
     build: {
       outDir: 'dist',
